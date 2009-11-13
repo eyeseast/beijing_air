@@ -9,6 +9,7 @@ class AqiDefinition(models.Model):
     color = models.CharField(max_length=10)
     min_aqi = models.IntegerField()
     max_aqi = models.IntegerField()
+    description = models.TextField(blank=True)
 
 
     class Meta:

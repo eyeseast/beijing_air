@@ -41,8 +41,8 @@ def update(**params):
     We'll also lock in the BeijingAir twitter name.
     """
     try:
-        latest_update = SmogUpdate.objects.order_by('-timestamp')[0]
-        params['since_id'] = latest_update.tweet_id
+        latest_update = SmogUpdate.objects.order_by('-tweet_timestamp')[0]
+        params['since_id'] = long(latest_update.tweet_id)
     except IndexError:
         latest_update = None
         params['count'] = 200 # no updates yet, so get the max

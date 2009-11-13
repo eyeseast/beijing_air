@@ -1,6 +1,23 @@
 import datetime
 from django.db import models
 
+#
+# Managers
+#
+
+class SmogManager(models.Manager):
+    def get_earliest_update(self):
+        """returns the earliest SmogUpdate in the database, or None"""
+        updates = self.order_by('timestamp')
+        try:
+            return updates[0]
+        except IndexError: # no updates yet
+            return None
+
+
+#
+# Models
+#
 
 class AqiDefinition(models.Model):
     "EPA definition for AQI"
@@ -31,8 +48,10 @@ class SmogUpdate(models.Model):
     definition = models.ForeignKey(AqiDefinition, related_name="updates")
 
     # twitter metadata
-    tweet_id = models.IntegerField(primary_key=True)
+    tweet_id = models.CharField(max_length=30)
     tweet_timestamp = models.DateTimeField()
+
+    objects = SmogManager()
 
 
     class Meta:

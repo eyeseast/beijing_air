@@ -69,3 +69,4 @@ def update(**params):
         update.tweet_timestamp = parsedate(tweet['created_at'])
 
         update.save()
+

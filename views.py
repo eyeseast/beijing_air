@@ -46,6 +46,7 @@ def timeplot_csv(request):
     updates = SmogUpdate.objects.range(start, end)
     
     response = HttpResponse(mimetype='text/plain')
+    response.write("# timestamp, concentration, aqi, definition \n")
     writer = csv.writer(response)
     
     for update in updates:

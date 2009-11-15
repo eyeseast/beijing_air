@@ -8,7 +8,7 @@ urlpatterns = patterns('',
         name="beijingair_index"
         ),
     
-    url(r'^csv/$',
+    url(r'^data.txt$',
         views.timeplot_csv,
         name="beijingair_timeplot_csv"
         ),

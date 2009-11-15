@@ -20,12 +20,27 @@
 var timeplot;
 
 function init() {
+	var smogSource = new Timeplot.DefaultEventSource();
+	var aqiRange = new Timeplot.DefaultValueGeometry({
+		gridColor: '#333',
+		axisLabelsPlacement: 'left',
+		min: 0,
+		max: 510
+	});
 	var plotInfo = [
 		Timeplot.createPlotInfo({
-			'id': timeplot
+			id: timeplot,
+			dataSource: new Timeplot.ColumnSource(smogSource, 2),
+			valueGeometry: aqiRange,
+			timeGeometry: new Timeplot.DefaultTimeGeometry({
+				gridColor: "#333",
+				axisLabelsPlacement: "top"
+			}),
+			showValues: true,
 		})
 	];
 	timeplot = Timeplot.create(document.getElementById("timeplot"), plotInfo);
+	timeplot.loadText("{% url beijingair_timeplot_csv %}?start={{ start.date }}&end={{ end.date }}", ",", smogSource);
 }
 
 var resizeTimerID = null;
@@ -51,10 +66,14 @@ $(document).resize(function() {
 
 {% block title %}Counting Blue Skies in Beijing{% endblock %}
 
+{% block masthead %}
+<h1>Counting blue skies in Beijing</h1>
+{% endblock %}
+
 {% block content %}
 
 {% block timeplot %}
-<div id="timeplot" class="containter"></div>
+<div id="timeplot"></div>
 {% endblock %}
 <div id="main" class="clear">
 <div id="now" class="span-15 colborder">

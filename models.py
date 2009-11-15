@@ -19,8 +19,8 @@ class SmogManager(models.Manager):
     def range(self, start, end):
         """Returns all updates between two dates"""
         return self.filter(
-            timestamp__gt=start,
-            timestamp__lt=end
+            timestamp__gte=start,
+            timestamp__lte=end
         )
     
     def date(self, day):

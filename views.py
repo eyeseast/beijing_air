@@ -17,7 +17,10 @@ def get_range(request):
     if end:
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d')
     else:
-        end_date = datetime.datetime.now()
+        try:
+            end_date = SmogUpdate.objects.order_by('-timestamp')[0].timestamp
+        except:
+            end_date = datetime.datetime.now()
     
     if start:
         start_date = datetime.datetime.strptime(start, '%Y-%m-%d')

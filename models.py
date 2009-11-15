@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.db.models import Avg
 
 #
 # Managers
@@ -13,6 +14,26 @@ class SmogManager(models.Manager):
             return updates[0]
         except IndexError: # no updates yet
             return None
+    
+    
+    def range(self, start, end):
+        """Returns all updates between two dates"""
+        return self.filter(
+            timestamp__gt=start,
+            timestamp__lt=end
+        )
+    
+    def date(self, day):
+        return self.filter(
+            timestamp__year=day.year,
+            timestamp__month=day.month,
+            timestamp__day=day.day
+        )
+    
+    def daily_avg(self, day=None, field='aqi'):
+        if not day:
+            day = datetime.datetime.today()
+        return self.date(day).aggregate(Avg(field))['%s__avg' % field]
 
 
 #

@@ -52,21 +52,47 @@ def update(**params):
     tweets = get_tweets(**params)
 
     for tweet in tweets:
-        tweet_list = tweet['text'].split(' ; ')
-        update = SmogUpdate()
-        update.timestamp = datetime.datetime.strptime(tweet_list[0] + tweet_list[1], '%m-%d-%Y%H:%M')
-        update.concentration = tweet_list[3]
-        update.aqi = tweet_list[4]
-
         try:
-            d = AqiDefinition.objects.get(name__iexact=tweet_list[5])
-        except AqiDefinition.DoesNotExist:
-            d = update.check_definition
+            _handle_tweet(tweet)
+        except: # Sometimes, it doesn't work. It's OK. We just need the big picture.
+            pass
 
-        update.definition = d
 
-        update.tweet_id = str(tweet['id'])
-        update.tweet_timestamp = parsedate(tweet['created_at'])
+def walk_back(loops=1, count=24, **params):
+    params['count'] = count
+    params['screen_name'] = 'BeijingAir'
+    
+    while loops > 0:
+        oldest = SmogUpdate.objects.get_earliest_update()
+        params['max_id'] = oldest.tweet_id
+        tweets = get_tweets(**params)
+        
+        for tweet in tweets:
+            try:
+                _handle_tweet(tweet)
+            except:
+                pass
+        
+        loops -= 1
+        walk_back(loops=loops, count=count)
 
-        update.save()
+
+def _handle_tweet(tweet):
+    tweet_list = tweet['text'].split(' ; ')
+    update = SmogUpdate()
+    update.timestamp = parsedate('%s %s' % (tweet_list[0], tweet_list[1]))
+    update.concentration = tweet_list[3]
+    update.aqi = tweet_list[4]
+
+    try:
+        d = AqiDefinition.objects.get(name__iexact=tweet_list[5])
+    except AqiDefinition.DoesNotExist:
+        d = update.check_definition()
+
+    update.definition = d
+
+    update.tweet_id = str(tweet['id'])
+    update.tweet_timestamp = parsedate(tweet['created_at'])
+
+    update.save()
 

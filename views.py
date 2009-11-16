@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from beijing_air.forms import DateRangeForm
 from beijing_air.models import AqiDefinition, SmogUpdate
 
 DEFAULT_RANGE = 30
@@ -31,6 +32,13 @@ def get_range(request):
 
 
 def index(request):
+    if request.GET:
+        form = DateRangeForm(request.GET)
+        if form.is_valid():
+            form = DateRangeForm(form.cleaned_data)
+    else:
+        form = DateRangeForm()
+    
     start, end = get_range(request)
     updates = SmogUpdate.objects.range(start, end)
     today = SmogUpdate.objects.daily_avg()

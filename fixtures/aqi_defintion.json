@@ -1,0 +1,74 @@
+[
+    {
+        "pk": 1, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Air quality is considered satisfactory, and air pollution poses little or no risk", 
+            "color": "00ff00", 
+            "max_aqi": 50, 
+            "name": "Good", 
+            "slug": "good", 
+            "min_aqi": 0
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.", 
+            "color": "ffff00", 
+            "max_aqi": 100, 
+            "name": "Moderate", 
+            "slug": "moderate", 
+            "min_aqi": 51
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Members of sensitive groups may experience health effects. The general public is not likely to be affected.", 
+            "color": "ff8c00", 
+            "max_aqi": 150, 
+            "name": "Unhealthy for Sensitive Groups", 
+            "slug": "unhealthy-sensitive-groups", 
+            "min_aqi": 101
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects.", 
+            "color": "ff0000", 
+            "max_aqi": 200, 
+            "name": "Unhealthy", 
+            "slug": "unhealthy", 
+            "min_aqi": 151
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Health alert: everyone may experience more serious health effects", 
+            "color": "ff00bb", 
+            "max_aqi": 300, 
+            "name": "Very unhealthy", 
+            "slug": "very-unhealthy", 
+            "min_aqi": 201
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "beijing_air.aqidefinition", 
+        "fields": {
+            "description": "Health warnings of emergency conditions. The entire population is more likely to be affected.", 
+            "color": "910030", 
+            "max_aqi": 500, 
+            "name": "Hazardous", 
+            "slug": "hazardous", 
+            "min_aqi": 301
+        }
+    }
+]

@@ -11,6 +11,10 @@ INPUT_FORMATS.append('%m/%d/%y')
 
 class CalendarWidget(forms.DateInput):
     class Media:
+        css = {
+            'all': ('http://jqueryui.com/latest/themes/base/ui.all.css',)
+        }
+        
         js = (
             settings.MEDIA_URL + 'js/jquery-1.3.2.min.js',
             settings.MEDIA_URL + 'js/jquery-ui-1.7.2.custom.min.js',
@@ -20,7 +24,7 @@ class CalendarWidget(forms.DateInput):
         rendered = super(CalendarWidget, self).render(name, value, attrs)
         return rendered + mark_safe(u"""<script type='text/javascript'>
             $(function() {
-                $('#id_%s').datepicker();
+                $('#id_%s').datepicker({ dateFormat: 'yy-mm-dd' });
             });
             </script>""" % name)
 

@@ -9,6 +9,7 @@ except ImportError:
 
 from decimal import Decimal
 from django.db import transaction
+from beijing_air import utils
 from beijing_air.models import SmogUpdate, AqiDefinition
 
 
@@ -17,16 +18,6 @@ BASE_URL = "http://twitter.com/statuses/user_timeline.json?"
 def get_tweets(**params):
     response = urllib2.urlopen(BASE_URL + urllib.urlencode(params)).read()
     return json.loads(response)
-
-
-def parsedate(s):
-    """
-    Convert a string into a (local, naive) datetime object.
-    """
-    dt = dateutil.parser.parse(s)
-    if dt.tzinfo:
-        dt = dt.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
-    return dt
 
 
 @transaction.commit_on_success
@@ -80,7 +71,7 @@ def walk_back(loops=1, count=24, **params):
 def _handle_tweet(tweet):
     tweet_list = tweet['text'].split(' ; ')
     update = SmogUpdate()
-    update.timestamp = parsedate('%s %s' % (tweet_list[0], tweet_list[1]))
+    update.timestamp = utils.parsedate('%s %s' % (tweet_list[0], tweet_list[1]))
     update.concentration = tweet_list[3]
     update.aqi = tweet_list[4]
 
@@ -92,7 +83,7 @@ def _handle_tweet(tweet):
     update.definition = d
 
     update.tweet_id = str(tweet['id'])
-    update.tweet_timestamp = parsedate(tweet['created_at'])
+    update.tweet_timestamp = utils.parsedate(tweet['created_at'])
 
     update.save()
 

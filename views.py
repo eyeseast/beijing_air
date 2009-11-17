@@ -1,45 +1,27 @@
 import csv
 import datetime
+import dateutil.parser
 
 from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+from beijing_air import utils
 from beijing_air.forms import DateRangeForm
 from beijing_air.models import AqiDefinition, SmogUpdate
-
-DEFAULT_RANGE = 30
-
-def get_range(request):
-    start = request.GET.get('start', None)
-    end = request.GET.get('end', None)
-    
-    if end:
-        end_date = datetime.datetime.strptime(end, '%Y-%m-%d')
-    else:
-        try:
-            end_date = SmogUpdate.objects.order_by('-timestamp')[0].timestamp
-        except:
-            end_date = datetime.datetime.now()
-    
-    if start:
-        start_date = datetime.datetime.strptime(start, '%Y-%m-%d')
-    else:
-        start_date = end_date - datetime.timedelta(DEFAULT_RANGE)
-    
-    return start_date, end_date
 
 
 def index(request):
     if request.GET:
         form = DateRangeForm(request.GET)
         if form.is_valid():
-            form = DateRangeForm(form.cleaned_data)
+            start, end = utils.get_range(form.cleaned_data)
+            
     else:
         form = DateRangeForm()
-    
-    start, end = get_range(request)
+        start, end = utils.get_range({})
+        
     updates = SmogUpdate.objects.range(start, end)
     today = SmogUpdate.objects.daily_avg()
     definition = AqiDefinition.objects.get(min_aqi__lt=today, max_aqi__gt=today)
@@ -49,7 +31,7 @@ def index(request):
 
 def timeplot_csv(request):
     "Generates a CSV using range defined in request params"
-    start, end = get_range(request)
+    start, end = utils.get_range(request.GET)
     
     updates = SmogUpdate.objects.range(start, end)
     

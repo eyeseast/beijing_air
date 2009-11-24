@@ -11,7 +11,10 @@ def get_date(d):
         return parsedate(d).date()
 
 def get_range(d):
-    "Takes a dictionary. Needs keys for start and/or end. Will produce defaults if neither."
+    """
+    Takes a dictionary. Needs keys for start and/or end. 
+    Will produce defaults if neither.
+    """
     DEFAULT_RANGE = 30
     start = d.get('start', None)
     end = d.get('end', None)
@@ -20,9 +23,9 @@ def get_range(d):
         end_date = get_date(end)
     else:
         try:
-            end_date = SmogUpdate.objects.order_by('-timestamp')[0].timestamp
+            end_date = SmogUpdate.objects.latest().timestamp
         except:
-            end_date = datetime.datetime.now()
+            end_date = datetime.datetime.now() + datetime.timedelta(.5)
     
     if start:
         start_date = get_date(start)

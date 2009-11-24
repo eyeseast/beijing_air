@@ -17,6 +17,8 @@ def index(request):
         form = DateRangeForm(request.GET)
         if form.is_valid():
             start, end = utils.get_range(form.cleaned_data)
+        else:
+            start, end = utils.get_range({})
             
     else:
         form = DateRangeForm()

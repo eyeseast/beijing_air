@@ -90,8 +90,7 @@ $(document).resize(function() {
 	<p><strong>{{ definition.name }}</strong>: {{ definition.description }}</p>
 	<div id="form">
 		<form action="." method="get">
-		<p class="datetime">{{ form.start.label }}: {{ form.start }}</p>
-		<p class="datetime">{{ form.end.label }}: {{ form.end }}</p>
+		{{ form.as_p }}
 		<p><input type="submit" value="Go"></p>
 		</form>
 	</div>

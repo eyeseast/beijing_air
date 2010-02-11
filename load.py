@@ -69,7 +69,7 @@ def walk_back(loops=1, count=24, **params):
 
 
 def _handle_tweet(tweet):
-    tweet_list = tweet['text'].split(' ; ')
+    tweet_list = tweet['text'].split('; ')
     update = SmogUpdate()
     update.timestamp = utils.parsedate('%s %s' % (tweet_list[0], tweet_list[1]))
     update.concentration = tweet_list[3]

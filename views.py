@@ -26,7 +26,7 @@ def index(request):
         
     updates = SmogUpdate.objects.range(start, end)
     today = SmogUpdate.objects.daily_avg()
-    definition = AqiDefinition.objects.get(min_aqi__lt=today, max_aqi__gt=today)
+    definition = AqiDefinition.objects.get(min_aqi__lt=today, max_aqi__gte=today)
     average = updates.aggregate(aqi=Avg('aqi'))['aqi']
     return render_to_response("beijing_air/index.html", locals(), context_instance=RequestContext(request))
 

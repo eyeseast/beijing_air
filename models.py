@@ -65,7 +65,7 @@ class SmogUpdate(models.Model):
     """
     timestamp = models.DateTimeField()
     aqi = models.IntegerField()
-    concentration = models.DecimalField(max_digits=4, decimal_places=3)
+    concentration = models.DecimalField(max_digits=8, decimal_places=3)
     definition = models.ForeignKey(AqiDefinition, related_name="updates")
 
     # twitter metadata
